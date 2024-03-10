@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <div class="container">
+        <h1>Торговля</h1>
+
+        <p>Добро пожаловать на страницу торговли криптовалютой!</p>
+
+        <h2>Текущие курсы криптовалют:</h2>
+        <ul>
+            {% for currency in cryptocurrencies %}
+                 <li>{{ currency.name }}: ${{ currency.price|floatformat:"2" }}</li>
+            {% endfor %}
+        </ul>
+    </div>
+{% endblock %}
+

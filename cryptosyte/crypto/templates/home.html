@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+
+{% block content %}
+    <div class="container">
+        <h1>Добро пожаловать</h1>
+
+        <div class="category">
+            <h2>Торговля</h2>
+            <button onclick="window.location.href='{% url 'trade' %}'">Продать или купить валюту</button>
+        </div>
+
+        <div class="category">
+            <h2>Обзор крипторынка</h2>
+            <p>Информация о криптовалютных рынках доступна здесь.</p>
+            <button onclick="window.location.href='{% url 'markets' %}'">Узнать больше</button>
+        </div>
+
+        <div class="category">
+            <h2>Форум</h2>
+            <p>Обсуждение криптовалютных тем.</p>
+            <button>Узнать больше</button>
+        </div>
+    </div>
+{% endblock %}

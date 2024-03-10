@@ -1,0 +1,130 @@
+body {
+    background-color: #1a1a1a;
+    color: #ffffff;
+    font-family: Arial, sans-serif;
+    line-height: 1.6;
+}
+
+.container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+    text-align: center;
+}
+
+h1 {
+    font-size: 2.5rem;
+    margin-bottom: 20px;
+}
+
+h2 {
+    font-size: 2rem;
+    margin-bottom: 15px;
+}
+
+p {
+    font-size: 1.1rem;
+    color: #cccccc;
+}
+
+ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+li {
+    margin-bottom: 10px;
+}
+
+/* Стили для категорий */
+.category {
+    background-color: #333333;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+    margin-bottom: 20px;
+    padding: 20px;
+    transition: transform 0.3s ease;
+}
+
+.category:hover {
+    transform: translateY(-5px);
+}
+
+.category h2 {
+    font-size: 1.8rem;
+    color: #ffffff;
+    margin-bottom: 10px;
+}
+
+.category p {
+    font-size: 1rem;
+    color: #cccccc;
+}
+
+html {
+    font-family: sans-serif;
+}
+
+.app {
+    display: grid;
+    grid-template-columns: 50px 30vw 50px;
+    grid-column-gap: 20px;
+}
+
+.container {
+    margin-top: 20px;
+}
+
+.tab-nav {
+    padding: 7px 15px;
+    border-radius: 8px 8px 0 0;
+    border-left: 1px solid transparent;
+    border-top: 1px solid transparent;
+    border-right: 1px solid transparent;
+    background-color: lightgray;
+    color: black;
+    cursor: pointer;
+}
+
+.tab-nav:hover {
+    border-left: 1px solid black;
+    border-top: 1px solid black;
+    border-right: 1px solid black;
+}
+
+.tab-nav:focus {
+    outline-color: #000000dd;
+    outline-style: solid;
+    outline-width: thick;
+}
+
+.tab-content {
+    display: none;
+    visibility: hidden;
+    opacity: 0;
+}
+
+.tab-content:target {
+    display: block;
+    visibility: visible;
+    opacity: 1;
+    animation-name: show;
+    animation-duration: 0.3s;
+}
+
+.tab-content-wrap {
+    width: 100%;
+    padding: 20px 40px;
+    border: 2px solid black;
+    border-radius: 0 8px 8px 8px;
+}
+
+@keyframes show {
+    from {
+        visibility: visible;
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
