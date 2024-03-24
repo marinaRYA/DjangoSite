@@ -1,15 +1,22 @@
 from django.shortcuts import render
 from django.http import HttpResponse, HttpResponseNotFound
 from django.shortcuts import HttpResponse, redirect
+from django.shortcuts import render, get_object_or_404
 from django.urls import reverse
+from .models import Crypto
 def home(request):
     return render(request, "home.html")
 
 def markets(request):
     return render(request, "markets.html")
 
-def currencies(request, currency_name):
-    return HttpResponse(f"<h1>Currencies</h1><p>Name: {currency_name}</p>")
+
+def currencies(request, currencies_slug):
+    # Получаем объект Crypto по slug
+    crypto = get_object_or_404(Crypto, slug=currencies_slug)
+
+    # Передаем объект Crypto в шаблон для отображения
+    return render(request, 'currencies.html', {'crypto': crypto})
 
 
 
@@ -28,14 +35,15 @@ def archive(request, currency_name, year):
 def invalid_year(request, currency_name, year):
     return HttpResponse(f"<h1>Error</h1><p>Invalid year: {year}</p>")
 
+
 def get_crypto_prices():
-    # список криптовалют с ценами
-    cryptocurrencies = [
-        {'name': 'Bitcoin', 'price': 67777},
-        {'name': 'Ethereum', 'price': 3861},
-        {'name': 'Litecoin', 'price': 87},
-    ]
-    return cryptocurrencies
+    # Получаем все объекты модели Crypto из базы данных
+    cryptocurrencies = Crypto.objects.all()
+
+    # Преобразуем объекты модели в словари, чтобы сохранить структуру данных как в вашем примере
+    crypto_data = [{'name': crypto.name, 'price': crypto.price} for crypto in cryptocurrencies]
+
+    return crypto_data
 
 def trade(request):
     # Получаем список криптовалют и их цен

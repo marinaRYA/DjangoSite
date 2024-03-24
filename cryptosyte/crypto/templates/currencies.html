@@ -1,0 +1,7 @@
+{% extends 'base.html' %}
+{% block content %}
+    <h1>{{ crypto.name }}</h1>
+    <p>Цена: ${{ crypto.price }}</p>
+    <p>Дата последнего обновления: {{ crypto.time_lastupdate }}</p>
+    <!-- Дополнительная информация о криптовалюте, если необходимо -->
+{% endblock %}

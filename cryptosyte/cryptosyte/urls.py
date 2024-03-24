@@ -25,7 +25,7 @@ urlpatterns = [
     path('', views.home),
     path('trade', views.trade, name='trade'),
     path('markets', views.markets, name='markets'),
-    path('currencies/<str:currency_name>/', views.currencies, name='currencies'),
+    path('currencies/<slug:currencies_slug>/', views.currencies, name='currencies'),
     path('currencies/<str:currency_name>/<int:year>/', views.archive, name='archive'),
     path('currencies/<str:currency_name>/<int:year>/invalid_year/', views.invalid_year, name='invalid_year'),
 ]
