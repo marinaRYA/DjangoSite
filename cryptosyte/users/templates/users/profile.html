@@ -1,15 +1,32 @@
 {% extends 'base.html' %}
+
 {% block content %}
-<h1>Профиль</h1>
-<form method="post">
- {% csrf_token %}
- <div class="form-error">{{ form.non_field_errors
-}}</div>
- {% for f in form %}
- <p ><label class="form-label" for="{{
-f.id_for_label }}">{{f.label}}: </label>{{ f }}</p>
- <div class="form-error">{{ f.errors }}</div>
- {% endfor %}
- <p ><button type="submit">Сохранить</button></p>
-</form>
+    <h1>Профиль</h1>
+
+    <h2>Информация о пользователе</h2>
+    <p><strong>Логин:</strong> {{ user.username }}</p>
+    <p><strong>Email:</strong> {{ user.email }}</p>
+    <p><strong>Имя:</strong> {{ user.first_name }}</p>
+    <p><strong>Фамилия:</strong> {{ user.last_name }}</p>
+    <p><strong>Дата рождения:</strong> {{ profile.birth_date|date:"d.m.Y" }}</p>
+    <p><strong>Биография:</strong> {{ profile.bio|default:"Нет данных" }}</p>
+    <p><strong>Локация:</strong> {{ profile.location|default:"Нет данных" }}</p>
+    <hr><p ><a href="{% url 'users:password_change' %}">Сменить пароль</a></p>
+
+    <h2>Комментарии пользователя</h2>
+    {% if user_comments %}
+        <ul>
+            {% for comment in user_comments %}
+                <li>
+                    <strong>{{ comment.created_at }}:</strong>
+                    {{ comment.content|default:"Без текста" }}
+                    {% if comment.image %}
+                        <img src="{{ comment.image.url }}" alt="Изображение" style="max-width: 100px; max-height: 100px;">
+                    {% endif %}
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>Нет комментариев.</p>
+    {% endif %}
 {% endblock %}
