@@ -1,17 +1,324 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    <div class="container">
-        <h1>Торговля</h1>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Торговля и рынки</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-        <p>Добро пожаловать на страницу торговли криптовалютой!</p>
+        html, body {
+            height: 100%;
+            background: #222;
+            color: #ddd;
+            font-family: Arial, sans-serif;
+        }
 
-        <h2>Текущие курсы криптовалют:</h2>
-        <ul>
-            {% for currency in cryptocurrencies %}
-                 <li>{{ currency.name }}: ${{ currency.price|floatformat:"2" }}</li>
-            {% endfor %}
-        </ul>
+        .container {
+            padding: 20px;
+        }
+
+        .col-md-12 {
+            width: 100%;
+            padding: 20px;
+            background: #333;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+
+        .center-block {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+
+        .form-inline {
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .form-inline label {
+            margin-right: 10px;
+        }
+
+        .form-inline select,
+        .form-inline input[type="date"],
+        .form-inline button {
+            margin-right: 10px;
+            margin-top: 10px;
+        }
+
+        ul {
+            list-style-type: none;
+        }
+
+        h1, h2 {
+            color: #fff;
+        }
+
+        p, li {
+            color: #ddd;
+        }
+        /* Стили для меню */
+        .menu-toggle {
+            position: fixed;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            background: #000;
+            color: #fff;
+            padding: 10px;
+            cursor: pointer;
+            z-index: 1000; /* Поверх других элементов */
+            border-radius: 5px;
+            text-align: center;
+            transition: opacity 0.3s;
+        }
+
+        .nav-menu {
+            position: fixed;
+            left: -200px; /* Скрыто за пределами экрана */
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(0, 0, 0, 0.8); /* Полупрозрачный фон */
+            padding: 10px;
+            border-radius: 5px;
+            transition: left 0.3s; /* Плавное появление */
+            z-index: 999; /* Ниже кнопки "меню" */
+        }
+
+        .nav-menu a {
+            display: block;
+            color: #fff;
+            padding: 10px;
+            text-decoration: none;
+            transition: background 0.3s;
+        }
+
+        .nav-menu a:hover {
+            background: rgba(255, 255, 255, 0.2); /* Цвет при наведении */
+        }
+
+        /* Показывать меню при наведении на кнопку и скрывать текст кнопки */
+        .menu-toggle:hover {
+            opacity: 0; /* Скрываем текст кнопки */
+        }
+
+        /* Показать меню при наведении на кнопку */
+        .menu-toggle:hover + .nav-menu, .nav-menu:hover {
+            left: 0; /* Показать меню */
+        }
+
+        .nav-menu:hover + .menu-toggle {
+            opacity: 0; /* Скрыть текст кнопки, когда меню активно */
+        }
+
+    </style>
+</head>
+<body>
+<div class="menu-toggle">Меню</div> <!-- Кнопка для открытия меню -->
+    <div class="nav-menu">
+        <a href="{{ home_url }}">Домой</a>
+        <a href="{{ markets_url }}">Посты</a>
+        <a href="{{ trade_url }}">Торговля</a>
+        <!-- Добавьте другие кнопки по мере необходимости -->
     </div>
-{% endblock %}
+    <div class="container">
+        <div class="col-md-12">
+            <h1>Торговля</h1>
+            <div class="center-block">
+                <div class="form-inline">
+                    <label for="currency">Выберите валюту:</label>
+                    <form id="tradeForm" action="" method="GET">
+                        <select name="currency" id="currency">
+                            <option value="USD">USD</option>
+                            <option value="EUR">EUR</option>
+                            <option value="RUB">RUB</option>
+                        </select>
 
+                        <label for="start_date">Выберите дату:</label>
+                        <input type="date" id="start_date" name="start_date" value="{{ request.GET.start_date }}" min="2018-01-01" max="{{ today }}">
+
+                        <button type="submit">Применить</button>
+                    </form>
+                </div>
+            </div>
+
+            <h2>Текущие курсы криптовалют:</h2>
+                {% if cryptocurrencies %}
+                    <ul>
+                        {% for currency in cryptocurrencies %}
+                            <li>
+                                {% if currency.currency == 'USD' and request.GET.currency == 'USD' %}
+                                    {{ currency.name }}: ${{ currency.price|floatformat:"2" }}
+                                {% elif currency.currency == 'EUR' and request.GET.currency == 'EUR' %}
+                                    {{ currency.name }}: €{{ currency.price|floatformat:"2" }}
+                                {% elif currency.currency == 'RUB' and request.GET.currency == 'RUB' %}
+                                    {{ currency.name }}: {{ currency.price|floatformat:"2" }} ₽
+                                {% endif %}
+                            </li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+
+        </div>
+         <div class="col-md-12">
+            <h2>Обзор:</h2>
+            <div class="app">
+                <canvas id="canvas" height="200" width="900"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/waypoints/4.0.1/jquery.waypoints.min.js"></script>
+    <script>
+        async function fetchData() {
+            const accessKey = '92f9b1a42efd0698272de40ff217a872';
+            const target = 'USD';
+            const symbols = 'BTC,ETH,XRP';
+            today = new Date();
+
+            const dates = [];
+
+            for (let i = 7; i >= 0; i--) {
+                const date = new Date();
+                date.setDate(today.getDate() - i);
+                const formattedDate = date.toISOString().split('T')[0];
+                dates.push(formattedDate);
+            }
+            console.log('Запрашиваемые даты:', dates);
+            const promises = dates.map(date =>
+                fetch(`https://api.coinlayer.com/api/${date}?access_key=${accessKey}&symbols=${symbols}`)
+                    .then(response => response.json())
+            );
+
+            try {
+                const results = await Promise.all(promises);
+                const labels = dates;
+                const bitcoinData = results.map(result => result.rates.BTC);
+                const ethereumData = results.map(result => result.rates.ETH);
+                const rippleData = results.map(result => result.rates.XRP);
+
+                const chartData = {
+                    labels: labels,
+                    datasets: [
+                        { label: 'Bitcoin', data: bitcoinData },
+                        { label: 'Ethereum', data: ethereumData },
+                        { label: 'Ripple', data: rippleData }
+                    ]
+                };
+
+                // Сохраняем данные в localStorage
+                localStorage.setItem('chartData', JSON.stringify(chartData));
+                return chartData;
+            } catch (error) {
+                console.error('Error fetching data:', error);
+            }
+        }
+
+        function loadChart(data) {
+            var ctx = document.getElementById("canvas").getContext("2d");
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: data.labels,
+                    datasets: [
+                        {
+                            label: data.datasets[0].label,
+                            backgroundColor: "rgba(220,220,220,.5)",
+                            borderColor: "rgba(220,220,220,1)",
+                            pointBackgroundColor: "rgba(220,220,220,1)",
+                            pointBorderColor: "#fff",
+                            data: data.datasets[0].data
+                        },
+                        {
+                            label: data.datasets[1].label,
+                            backgroundColor: "rgba(90,190,90,.5)",
+                            borderColor: "rgba(90,190,90,1)",
+                            pointBackgroundColor: "rgba(90,190,90,1)",
+                            pointBorderColor: "#fff",
+                            data: data.datasets[1].data
+                        },
+                        {
+                            label: data.datasets[2].label,
+                            backgroundColor: "rgba(90,90,190,.5)",
+                            borderColor: "rgba(90,90,190,1)",
+                            pointBackgroundColor: "rgba(90,90,190,1)",
+                            pointBorderColor: "#fff",
+                            data: data.datasets[2].data
+                        }
+                    ]
+                },
+                options: {
+                    scales: {
+                        x: {
+                            ticks: { color: '#ddd' },
+                            grid: { color: 'rgba(255,255,255,0.1)' }
+                        },
+                        y: {
+                            ticks: { color: '#ddd' },
+                            grid: { color: 'rgba(255,255,255,0.1)' }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            labels: { color: '#ddd' }
+                        }
+                    }
+                }
+            });
+        }
+
+// Когда страница загружена
+$(document).ready(function() {
+    // Проверяем, есть ли данные в localStorage
+    const savedData = localStorage.getItem('chartData');
+    var today = new Date().toISOString().split('T')[0]; // Получаем текущую дату в формате YYYY-MM-DD
+
+    // Устанавливаем значение поля даты на текущую дату, если оно пустое
+    var startDateInput = document.getElementById('start_date');
+    if (!startDateInput.value) {
+        startDateInput.value = today; // Устанавливаем текущую дату, если поле пустое
+    } else {
+        // Проверяем, что выбранная дата не больше текущей
+        if (startDateInput.value > today) {
+            startDateInput.value = today; // Если дата больше текущей, устанавливаем текущую дату
+        }
+    }
+
+    // Проверяем, есть ли данные в localStorage
+    if (savedData) {
+        const chartData = JSON.parse(savedData);
+        loadChart(chartData);
+    } else {
+        fetchData().then(function(response_data) {
+            if (!response_data) return;
+            loadChart(response_data);
+        }).catch(function(error) {
+            console.error('Error initializing chart:', error);
+        });
+    }
+
+    document.getElementById('tradeForm').addEventListener('submit', function(event) {
+        var selectedCurrency = document.getElementById('currency').value;
+        localStorage.setItem('selectedCurrency', selectedCurrency);
+    });
+
+    var selectedCurrency = localStorage.getItem('selectedCurrency');
+    if (selectedCurrency) {
+        document.getElementById('currency').value = selectedCurrency;
+    }
+});
+
+
+    </script>
+</body>
+{% endblock %}

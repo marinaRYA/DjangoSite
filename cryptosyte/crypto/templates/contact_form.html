@@ -1,0 +1,53 @@
+
+{% extends 'base.html' %}
+
+
+{% block content %}
+      <meta charset="UTF-8">
+<h1>Контактная форма</h1>
+<div id="form-messages"></div> <!-- Сюда будут выводиться сообщения -->
+
+<form id="contact-form" method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Отправить</button>
+</form>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script>
+    // Обработка отправки формы с использованием AJAX
+    $(document).ready(function() {
+        $('#contact-form').on('submit', function(event) {
+            event.preventDefault();  // Отключаем стандартную отправку формы
+
+            // Собираем данные формы
+            var formData = $(this).serialize();
+
+            $.ajax({
+
+                type: "POST",
+                data: formData,
+                dataType: "json",
+                success: function(response) {
+                    if (response.status === 'success') {
+                        // Если успешная отправка - выводим сообщение
+                        $('#form-messages').html('<p style="color: green;">' + response.message + '</p>');
+                        // Очищаем форму
+                        $('#contact-form')[0].reset();
+                    } else if (response.status === 'error') {
+                        // Если ошибка - выводим ошибки формы
+                        var errors = JSON.parse(response.errors);
+                        var errorHtml = '<ul style="color: red;">';
+                        $.each(errors, function(field, messages) {
+                            errorHtml += '<li>' + field + ': ' + messages[0].message + '</li>';
+                        });
+                        errorHtml += '</ul>';
+                        $('#form-messages').html(errorHtml);
+                    }
+                }
+            });
+        });
+    });
+</script>
+
+{% endblock %}

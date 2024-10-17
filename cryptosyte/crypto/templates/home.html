@@ -1,3 +1,4 @@
+
 {% extends 'base.html' %}
 
 
@@ -17,9 +18,9 @@
         </div>
 
         <div class="category">
-            <h2>Форум</h2>
-            <p>Обсуждение криптовалютных тем.</p>
-            <button>Узнать больше</button>
+            <h2>Личный кабинет</h2>
+            <button onclick="window.location.href='{% url 'contact_form' %}'">Вход|Регистрация</button>
+            
         </div>
     </div>
 {% endblock %}
