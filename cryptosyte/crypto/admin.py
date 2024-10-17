@@ -1,10 +1,11 @@
 from django.contrib import admin
 from django.utils.safestring import mark_safe
 
-from .models import Crypto, Post, Tag, Comment, Profile
+from .models import Crypto, Post, Tag, Comment
 from django.utils import timezone
 from django.contrib import messages
 from datetime import timedelta, datetime
+from users.models import Profile
 
 admin.site.site_header = "Моя Админ-Панель"
 admin.site.site_title = "Портал Администрирования"

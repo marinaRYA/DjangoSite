@@ -19,6 +19,7 @@ from django.urls import path, include
 from django.contrib import admin
 from django.conf import settings
 from django.conf.urls.static import static
+from django.contrib.auth import views as auth_views
 from crypto import views
 
 handler404 = 'crypto.views.page_not_found'
@@ -36,6 +37,8 @@ urlpatterns = [
     path('delete_comment/<int:pk>/', views.DeleteCommentView.as_view(), name='delete_comment'),
     path('comment/<int:pk>/edit/', views.CommentUpdateView.as_view(), name='edit_comment'),
     path('markets/<int:post_id>/', views.PostListView.as_view(), name='markets'),
+    #path('profile/<int:pk>/', views.ProfileDetailView.as_view(), name='profile'),
+    path('users/', include('users.urls', namespace='users'))
    # path('trade/<int:pk>/', views.TradeView.as_view(), name='trade'),
 ]
 #urlpatterns = [

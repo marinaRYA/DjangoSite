@@ -1,6 +1,5 @@
 {% extends 'base.html' %}
 {% block content %}
-<input type="hidden" name="next" value="{{ next }}" />
 <style>
 .button-link {
     display: inline-block;
@@ -33,27 +32,27 @@ button, .button-link {
 }
 
 </style>
-<h1>Авторизация</h1>
 <form method="post">
     {% csrf_token %}
+    <input type="hidden" name="next" value="{{ next }}" />
 
-    <!-- Вывод общих ошибок формы -->
     <div class="form-error">{{ form.non_field_errors }}</div>
 
-    <!-- Вывод каждого поля формы с его ошибками -->
     {% for f in form %}
         <p>
-            <label class="form-label" for="{{ f.id_for_label }}">{{ f.label }}: </label>
+            <label class="form-label" for="{{ f.id_for_label }}">{{ f.label }}:</label>
             {{ f }}
         </p>
         <div class="form-error">{{ f.errors }}</div>
     {% endfor %}
 
-    <button type="submit">Войти</button>
-    <!-- Кнопка отправки формы -->
+    <p>
+        <button type="submit">Регистрация</button>
+    </p>
     <div class="button-group">
-    <a href="{% url 'users:register' %}" class="button-link">Зарегистрироваться</a>
+    <a href="{% url 'users:login' %}" class="button-link">Войти в существующий аккаунт</a>
     <a href="{% url 'home' %}" class="button-link">Вернуться на главную</a>
     </div>
 </form>
+
 {% endblock %}

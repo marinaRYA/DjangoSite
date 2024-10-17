@@ -1,18 +1,17 @@
 import requests
 from datetime import datetime
 from django.urls import reverse_lazy
-from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.paginator import Paginator
 from django.http import HttpResponse, HttpResponseNotFound, JsonResponse
-from django.shortcuts import redirect, get_object_or_404
+from django.shortcuts import redirect, get_object_or_404, render
 from django.urls import reverse
 from django.views.generic import TemplateView, ListView, DetailView, FormView, DeleteView, UpdateView
 from .utils import DataMixin
 from .models import Crypto, Post, Tag, Comment
 from .forms import ContactForm, CommentForm
 from django.contrib import messages
-
-
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.db.models import Avg
 def format_date(date):
     return date.strftime('%d.%m.%y')
 
@@ -30,12 +29,39 @@ class BaseContextMixin(DataMixin):
 class HomeView(TemplateView):
     template_name = "home.html"
 
+# class ProfileDetailView(LoginRequiredMixin, BaseContextMixin, DetailView):
+#     model = Profile
+#     template_name = 'profile.html'
+#     context_object_name = 'profile'
+#
+#     def get_object(self, queryset=None):
+#         # Возвращаем профиль текущего пользователя
+#         return self.request.user.profile
+#
+#     def get_context_data(self, **kwargs):
+#         context = super().get_context_data(**kwargs)
+#
+#         user = self.request.user
+#
+#
+#         # Получаем все комментарии пользователя
+#         user_comments = Comment.objects.filter(user=user)
+#
+#         # Количество комментариев пользователя
+#         comment_count = user_comments.count()
+#
+#
+#         context['user_comments'] = user_comments
+#         context['comment_count'] = comment_count
+#
+#         return context
 
-class CurrencyDetailView(LoginRequiredMixin, BaseContextMixin, DetailView):
+class CurrencyDetailView(DetailView):
     model = Crypto
     template_name = 'currencies.html'
     slug_field = 'slug'
-    slug_url_kwarg = 'currencies_slug'
+    slug_url_kwarg = ('currencies_slug'
+                      '')
 
 
 class ArchiveView(BaseContextMixin, TemplateView):
@@ -56,6 +82,7 @@ class InvalidYearView(BaseContextMixin, TemplateView):
         return HttpResponse(f"<h1>Error</h1><p>Invalid year: {year}</p>")
 
 
+
 class TradeView(BaseContextMixin, TemplateView):
     template_name = 'trade.html'
 
@@ -70,7 +97,11 @@ class TradeView(BaseContextMixin, TemplateView):
             if success:
                 cryptocurrencies = Crypto.actual_crypto.filter(time_lastupdate__date=selected_date)
 
+        average_prices = Crypto.objects.values('name').annotate(average_price=Avg('price'))
+        average_prices_dict = {item['name']: item['average_price'] for item in average_prices}
+
         context['cryptocurrencies'] = cryptocurrencies
+        context['average_prices'] = average_prices_dict
         context['today'] = datetime.today().strftime('%Y-%m-%d')
         return context
 
@@ -153,8 +184,7 @@ class PostListView(LoginRequiredMixin, BaseContextMixin, ListView):
 
         return redirect('markets')
 
-
-class ContactView(LoginRequiredMixin, BaseContextMixin, FormView):
+class ContactView(BaseContextMixin, FormView):
     form_class = ContactForm
     template_name = 'contact_form.html'
 
@@ -192,3 +222,12 @@ class CommentUpdateView(LoginRequiredMixin, UpdateView):
     def get_success_url(self):
         # Переходите обратно к посту после редактирования
         return reverse_lazy('markets', kwargs={'post_id': self.object.post.id})
+def register(request):
+    if request.method == 'POST':
+        form = RegisterUserForm(request.POST)
+        if form.is_valid():
+            form.save()  # Сохраняем пользователя и профиль
+            return redirect('login')  # Перенаправляем на страницу входа или другую
+    else:
+        form = RegisterUserForm()
+    return render(request, 'register.html', {'form': form})

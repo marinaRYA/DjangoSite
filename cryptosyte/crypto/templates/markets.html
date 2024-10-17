@@ -175,6 +175,7 @@
         <a href="{{ home_url }}">Домой</a>
         <a href="{{ markets_url }}">Посты</a>
         <a href="{{ trade_url }}">Торговля</a>
+        <a href="{{ profile_url }}">Профиль</a>
         <!-- Добавьте другие кнопки по мере необходимости -->
     </div>
 
@@ -212,7 +213,6 @@
                                 {% endfor %}
                             </p>
 
-
                             <h3>Комментарии:</h3>
                             {% if messages %}
                                 <ul class="messages">
@@ -248,17 +248,16 @@
                                                     {% csrf_token %}
                                                     <button type="submit" class="btn btn-danger">Удалить</button>
                                                 </form>
-                                                 <form method="post" action="{% url 'edit_comment' comment.id %}">
+                                                <form method="post" action="{% url 'edit_comment' comment.id %}">
                                                     {% csrf_token %}
                                                     <button type="submit" class="btn btn-danger">Редактировать</button>
                                                 </form>
-                                                {% endif %}
+                                            {% endif %}
                                         </div>
                                     </li>
                                 {% endif %}
                             {% endfor %}
-                        </ul>
-
+                            </ul>
 
                             <!-- Форма добавления комментария -->
                             <h3>Оставить комментарий:</h3>
@@ -273,34 +272,31 @@
                 </ul>
 
                 <!-- Пагинация -->
-                <div class="pagination">
-                    {% if total_posts > paginate_by %}
-                <div class="pagination">
-                    {% if page.has_previous %}
-                        <a href="?page={{ page.previous_page_number }}{% if selected_tag %}&tag={{ selected_tag }}{% endif %}">« Предыдущая</a>
-                    {% else %}
-                        <span class="disabled">« Предыдущая</span>
-                    {% endif %}
-
-                    {% for num in page.paginator.page_range %}
-                        {% if num == page.number %}
-                            <span class="current">{{ num }}</span>
-                        {% elif num > page.number|add:-3 and num < page.number|add:3 %}
-                            <a href="?page={{ num }}{% if selected_tag %}&tag={{ selected_tag }}{% endif %}">{{ num }}</a>
+                {% if total_posts > 2 %}
+                    <div class="pagination">
+                        {% if page.has_previous %}
+                            <a href="?page={{ page.previous_page_number }}{% if selected_tag %}&tag={{ selected_tag }}{% endif %}">« Предыдущая</a>
+                        {% else %}
+                            <span class="disabled">« Предыдущая</span>
                         {% endif %}
-                    {% endfor %}
 
-                    {% if page.has_next %}
-                        <a href="?page={{ page.next_page_number }}{% if selected_tag %}&tag={{ selected_tag }}{% endif %}">Следующая »</a>
-                    {% else %}
-                        <span class="disabled">Следующая »</span>
-                    {% endif %}
-                </div>
-            {% endif %}
-                </div>
+                        {% for num in page.paginator.page_range %}
+                            {% if num == page.number %}
+                                <span class="current">{{ num }}</span>
+                            {% else %}
+                                <a href="?page={{ num }}{% if selected_tag %}&tag={{ selected_tag }}{% endif %}">{{ num }}</a>
+                            {% endif %}
+                        {% endfor %}
 
+                        {% if page.has_next %}
+                            <a href="?page={{ page.next_page_number }}{% if selected_tag %}&tag={{ selected_tag }}{% endif %}">Следующая »</a>
+                        {% else %}
+                            <span class="disabled">Следующая »</span>
+                        {% endif %}
+                    </div>
+                {% endif %}
             {% else %}
-                <p>Посты не найдены.</p>
+                <p>Нет доступных постов.</p>
             {% endif %}
         </div>
     </div>

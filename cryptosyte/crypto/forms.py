@@ -1,7 +1,8 @@
 from django import forms
 from django.core.exceptions import ValidationError
+from django.contrib.auth.forms import AuthenticationForm
 from .models import Comment
-
+from django.contrib.auth.models import User
 # Форма, не связанная с моделью
 class ContactForm(forms.Form):
     name = forms.CharField(max_length=100, label="Ваше имя")
@@ -28,6 +29,3 @@ class CommentForm(forms.ModelForm):
                 raise ValidationError('Комментарий должен содержать не более 200 символов.')
 
         return cleaned_data
-
-
-

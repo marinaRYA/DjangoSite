@@ -1,14 +1,28 @@
-
 {% extends 'base.html' %}
-
 
 {% block content %}
     <div class="container">
+        <!-- Login/Registration Panel -->
+       <div class="auth-panel">
+            {% if user.is_authenticated %}
+                <p>Вы вошли как {{ user.username }}</p>
+                <form method="POST" action="{% url 'users:logout' %}">
+                    {% csrf_token %}
+                    <button type="submit">Выйти</button>
+                </form>
+            {% else %}
+                <button onclick="window.location.href='{% url 'users:login' %}'" class="button">Вход</button>
+                <button onclick="window.location.href='{% url 'users:register' %}'" class="button">Регистрация</button>
+            {% endif %}
+        </div>
+
+
+
         <h1>Добро пожаловать</h1>
 
         <div class="category">
             <h2>Торговля</h2>
-            <button onclick="window.location.href='{% url 'trade' %}'">Продать или купить валюту</button>
+            <button onclick="window.location.href='{% url 'trade' %}'">Информация о валюте</button>
         </div>
 
         <div class="category">
@@ -17,10 +31,13 @@
             <button onclick="window.location.href='{% url 'markets' %}'">Узнать больше</button>
         </div>
 
-        <div class="category">
+       <div class="category">
             <h2>Личный кабинет</h2>
-            <button onclick="window.location.href='{% url 'contact_form' %}'">Вход|Регистрация</button>
-            
+            {% if user.is_authenticated and user.profile %}
+                <button onclick="window.location.href='{% url 'users:profile' pk=user.profile.pk %}'">Информация о профиле</button>
+            {% else %}
+                <p>Профиль недоступен</p>
+            {% endif %}
         </div>
     </div>
 {% endblock %}
