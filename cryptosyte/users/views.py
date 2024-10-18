@@ -8,7 +8,7 @@ from django.views.generic import CreateView, UpdateView
 from users.forms import RegisterUserForm, ProfileUserForm, UserPasswordChangeForm
 from users.models import Profile
 from crypto.models import Comment
-
+from crypto.utils import DataMixin
 
 class LoginUser(LoginView):
  template_name = 'users/login.html'
@@ -30,7 +30,7 @@ class RegisterUser(CreateView):
  success_url = reverse_lazy('users:login')
 
 
-class ProfileUser(LoginRequiredMixin, UpdateView):
+class ProfileUser(LoginRequiredMixin, DataMixin, UpdateView):
     model = get_user_model()  # Указывает на модель пользователя
     form_class = ProfileUserForm
     template_name = 'users/profile.html'

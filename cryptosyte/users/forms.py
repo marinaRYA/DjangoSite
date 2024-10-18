@@ -4,15 +4,15 @@ from django.contrib.auth import get_user_model
 from users.models import Profile
 User = get_user_model()
 
-class LoginUserForm(AuthenticationForm):
-    username = forms.CharField(
-        label='Логин',
-        widget=forms.TextInput(attrs={'class': 'form-input'})
-    )
-    password = forms.CharField(
-        label='Пароль',
-        widget=forms.PasswordInput(attrs={'class': 'form-input'})
-    )
+# class LoginUserForm(AuthenticationForm):
+#     username = forms.CharField(
+#         label='Логин',
+#         widget=forms.TextInput(attrs={'class': 'form-input'})
+#     )
+#     password = forms.CharField(
+#         label='Пароль',
+#         widget=forms.PasswordInput(attrs={'class': 'form-input'})
+#     )
 
 class RegisterUserForm(UserCreationForm):
     username = forms.CharField(

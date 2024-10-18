@@ -6,7 +6,7 @@ class DataMixin:
         context['markets_url'] = reverse('markets')  # URL для страницы рынков
         context['trade_url'] = reverse('trade')  # URL для списка постов4e
         if self.request.user.is_authenticated:
-            context['profile_url'] = reverse('profile', kwargs={'pk': self.request.user.pk})
+            context['profile_url'] = reverse('users:profile', kwargs={'pk': self.request.user.pk})
         else:
             context['profile_url'] = '#'
         return context

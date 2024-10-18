@@ -1,12 +1,25 @@
-/* Основные стили для body и текстов */
 body {
     background-color: #1a1a1a;
     color: #ffffff;
     font-family: Arial, sans-serif;
     line-height: 1.6;
-    margin: 0; /* Убираем отступы по умолчанию */
 }
 
+
+.container {
+
+    flex-wrap: wrap;
+    margin: 0 auto;
+    padding: 20px;
+    text-align: center;
+}
+.form-inline {
+    display: inline-block;
+    vertical-align: middle;
+}
+.container form button {
+    margin: 0 10px 10px 0;
+}
 h1 {
     font-size: 2rem;
     margin-bottom: 20px;
@@ -17,57 +30,19 @@ h2 {
     margin-bottom: 15px;
 }
 
+
 p {
     font-size: 1.1rem;
     color: #cccccc;
 }
 
-/* Стили для контейнера */
-.container {
-    display: flex;
-    flex-direction: column;
-    align-items: center; /* Центрирование содержимого */
-    margin: 0 auto;
-    padding: 20px;
-    max-width: 600px; /* Ограничение ширины контейнера */
+ul {
+    list-style-type: none;
+    padding: 0;
 }
 
-/* Стили для форм */
-.form-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center; /* Центрирование по горизонтали */
-    width: 100%; /* Занять всю ширину контейнера */
-}
-
-.form-container input,
-.form-container textarea {
-    width: 100%; /* Занять всю ширину контейнера */
-    max-width: 400px; /* Максимальная ширина поля */
-    margin-bottom: 15px; /* Отступ между полями */
-    padding: 10px; /* Внутренние отступы */
-    border: 1px solid #ccc; /* Граница */
-    border-radius: 5px; /* Скругление углов */
-    background-color: #333; /* Цвет фона полей */
-    color: #fff; /* Цвет текста */
-}
-
-/* Стили для кнопок */
-button {
-    background-color: #007bff; /* Цвет фона */
-    color: #fff; /* Цвет текста */
-    border: none; /* Убрать границу */
-    padding: 10px 20px; /* Внутренние отступы */
-    border-radius: 5px; /* Скругление углов */
-    cursor: pointer; /* Указатель курсора */
-    transition: background-color 0.3s; /* Плавный переход цвета фона */
-    width: 100%; /* Занять всю ширину контейнера */
-    max-width: 400px; /* Максимальная ширина кнопки */
-    margin-top: 10px; /* Отступ сверху для кнопки */
-}
-
-button:hover {
-    background-color: #0056b3; /* Цвет фона при наведении */
+li {
+    margin-bottom: 10px;
 }
 
 /* Стили для категорий */
@@ -95,18 +70,33 @@ button:hover {
     color: #cccccc;
 }
 
-/* Стили для табов */
+html {
+    font-family: sans-serif;
+}
+
+.app {
+    display: grid;
+    grid-template-columns: 50px 30vw 50px;
+    grid-column-gap: 20px;
+}
+
+.container {
+    margin-top: 20px;
+}
+
 .tab-nav {
     padding: 7px 15px;
     border-radius: 8px 8px 0 0;
-    border: 1px solid transparent;
+    border-left: 1px solid transparent;
+    border-top: 1px solid transparent;
+    border-right: 1px solid transparent;
     background-color: lightgray;
     color: black;
     cursor: pointer;
 }
 
 .tab-nav:hover {
-    border: 1px solid black; /* Упрощение стилей при наведении */
+    border: 1px solid black;
 }
 
 .tab-nav:focus {
@@ -115,7 +105,6 @@ button:hover {
     outline-width: thick;
 }
 
-/* Стили для таб-контента */
 .tab-content {
     display: none;
     visibility: hidden;
@@ -147,26 +136,10 @@ button:hover {
     }
 }
 
-/* Стили для активных тегов */
+
+
 .tag-button.active {
     background-color: #FFD700;
     border: 2px solid #fff;
     color: #222;
-}
-
-/* Стили для списков */
-ul {
-    list-style-type: none;
-    padding: 0;
-}
-
-li {
-    margin-bottom: 10px;
-}
-
-/* Стили для общей сетки приложения */
-.app {
-    display: grid;
-    grid-template-columns: 50px 30vw 50px;
-    grid-column-gap: 20px;
 }
