@@ -248,7 +248,7 @@
                                                     {% csrf_token %}
                                                     <button type="submit" class="btn btn-danger">Удалить</button>
                                                 </form>
-                                                <form method="post" action="{% url 'edit_comment' comment.id %}">
+                                                <form method="get" action="{% url 'edit_comment' comment.id %}">
                                                     {% csrf_token %}
                                                     <button type="submit" class="btn btn-danger">Редактировать</button>
                                                 </form>

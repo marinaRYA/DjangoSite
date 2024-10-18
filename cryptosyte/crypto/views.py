@@ -218,10 +218,11 @@ class CommentUpdateView(LoginRequiredMixin, UpdateView):
     model = Comment
     fields = ['content']
     template_name = 'comment_update.html'
-    success_url = reverse_lazy('markets')
+
     def get_success_url(self):
-        # Переходите обратно к посту после редактирования
-        return reverse_lazy('markets', kwargs={'post_id': self.object.post.id})
+        return reverse('markets', kwargs={'post_id': self.object.post.id})
+
+
 def register(request):
     if request.method == 'POST':
         form = RegisterUserForm(request.POST)

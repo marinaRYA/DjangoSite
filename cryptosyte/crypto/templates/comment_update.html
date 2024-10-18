@@ -1,10 +1,10 @@
-{% extends 'base.html' %} <!-- Наследование от базового шаблона -->
+{% extends 'base.html' %}
 
 {% block content %}
 <h2>Редактировать комментарий</h2>
 <form method="post">
     {% csrf_token %}
-    {{ form.as_p }} <!-- Отображение формы -->
+    {{ form.as_p }}
     <button type="submit">Сохранить изменения</button>
 </form>
 <button onclick="window.location.href='{% url 'markets' post_id=object.post.id %}'">Назад к посту</button>

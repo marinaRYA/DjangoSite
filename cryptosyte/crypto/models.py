@@ -61,7 +61,7 @@ class Tag(models.Model):
 class Comment(models.Model):
     post = models.ForeignKey(Post, related_name='comments', on_delete=models.CASCADE, verbose_name="Запись")
     user = models.ForeignKey(User, related_name='user_comments', on_delete=models.CASCADE, verbose_name="Пользователь")
-    content = models.TextField(blank=True, null=True, verbose_name="Комментарий")  # Делаем поле необязательным
+    content = models.TextField(blank=True, null=True, verbose_name="Комментарий")
     image = models.ImageField(upload_to='photos/%Y/%m/%d/', default=None, blank=True, null=True, verbose_name="Фото")
     created_at = models.DateTimeField(auto_now_add=True, verbose_name="Дата создания")
 
@@ -90,6 +90,6 @@ class Comment(models.Model):
             img_file = ContentFile(img_io.getvalue(), name=self.image.name)
             self.image = img_file
 
-        self.full_clean()  # Вызываем валидацию перед сохранением
+        self.full_clean()
         super().save(*args, **kwargs)
 
